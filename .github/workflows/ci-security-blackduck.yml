@@ -1,5 +1,6 @@
 name: CI - Security - SCA Scan - BlackDuck
 
+
 on:
   push:
     branches: [ main, master, develop, stage, release ]
