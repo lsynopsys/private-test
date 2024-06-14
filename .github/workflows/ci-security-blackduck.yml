@@ -1,0 +1,45 @@
+name: CI - Security - SCA Scan - BlackDuck
+ 
+on:
+  # schedule:
+  #   - cron: '33 3 * * SUN' # Every Sunday at 3:33am - commented out as still running in Azure DevOps (for DRApp stats)
+  push:
+    branches: [main]
+  pull_request:
+      branches: [main]
+  workflow_dispatch:
+jobs:
+  build:
+    name: CI - Security - SCA Scan - BlackDuck
+    runs-on: [ ubuntu-latest ]
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+ 
+      - name: Black Duck Full Scan
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: synopsys-sig/synopsys-action@v1.5.0
+        with:
+          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
+          blackduck_scan_full: true
+        env:
+          DETECT_PROJECT_NAME: ${{ vars.BLACKDUCK_PROJECT_NAME }}
+          DETECT_PROJECT_VERSION_NAME: 'main'
+          DETECT_NPM_DEPENDENCY_TYPES_EXCLUDED: DEV
+ 
+      - name: Black Duck PR Scan
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: synopsys-sig/synopsys-action@v1.5.0
+        with:
+          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
+          blackduck_scan_full: false
+          blackduck_automation_prcomment: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # blackduck_scan_failure_severities: 'BLOCKER,CRITICAL'
+        env:
+          DETECT_PROJECT_NAME: ${{ vars.BLACKDUCK_PROJECT_NAME }}
+          DETECT_PROJECT_VERSION_NAME: 'main'
+          DETECT_NPM_DEPENDENCY_TYPES_EXCLUDED: DEV
+ 
