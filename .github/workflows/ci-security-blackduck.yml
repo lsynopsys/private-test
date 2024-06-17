@@ -56,6 +56,7 @@ jobs:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
           blackduck_token: ${{ secrets.BLACKDUCK_API_TOKEN }}
           blackduck_scan_full: false
+          synopsys_bridge_download_version: "2.2.1"
 
           ### Below configuration is used to enable automatic pull request comment based on Black Duck scan result
           blackduck_prComment_enabled: true
