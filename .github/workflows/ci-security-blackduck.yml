@@ -47,7 +47,7 @@ jobs:
           # include_diagnostics: true
       - name: Black Duck PR Scan
         if: ${{ github.event_name == 'pull_request' }}
-        uses: synopsys-sig/synopsys-action@v1.9.0
+        uses: synopsys-sig/synopsys-action@v1.6.0
 
         ### Use below configuration to set specific detect environment variables
         env:
@@ -56,6 +56,7 @@ jobs:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
           blackduck_token: ${{ secrets.BLACKDUCK_API_TOKEN }}
           blackduck_scan_full: false
+          synopsys_bridge_download_version: "0.2.16"
 
           ### Below configuration is used to enable automatic pull request comment based on Black Duck scan result
           blackduck_prComment_enabled: true
